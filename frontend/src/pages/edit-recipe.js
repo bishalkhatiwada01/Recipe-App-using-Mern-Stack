@@ -6,24 +6,26 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useLocation } from "react-router-dom";
 
-export const EditRecipe = ({route}) => {
+export const EditRecipe = () => {
   const userID = useGetUserID();
   const navigate = useNavigate();
   const location = useLocation();
-console.log(route.params);
+  const data = location.state
   const [cookies, _] = useCookies(["access_token"]);
   const [recipe, setRecipe] = useState({
-    // name: recipeData?.name ||"",
-    // description: recipeData?.description || "",
-    // ingredients: recipeData?.ingredients || [],
-    // instructions: recipeData?.instructions || "",
-    // imageUrl: recipeData?.imageUrl || "",
-    // cookingTime: recipeData?.cookingTime || 0,
-    // userOwner: recipeData?.userOwner || userID,
+    name: data?.name ||"",
+    description: data?.description || "",
+    ingredients: data?.ingredients || [],
+    instructions: data?.instructions || "",
+    imageUrl: data?.imageUrl || "",
+    cookingTime: data?.cookingTime || 0,
+    userOwner: data?.userOwner || userID,
+    userID : userID,
+    recipeID : data._id
   });
 
   useEffect(() => {
-    console.log(location);
+    console.log(location.state);
   },[location])
 
 
@@ -48,7 +50,7 @@ console.log(route.params);
     event.preventDefault();
     try {
       await axios.put(
-        "http://localhost:3001/update",
+        "http://localhost:3001/recipes/update",
         { ...recipe },
         {
           headers: { authorization: cookies.access_token },
@@ -82,7 +84,7 @@ console.log(route.params);
           onChange={handleChange}
         ></textarea>
         <label htmlFor="ingredients">Ingredients</label>
-        {recipe.ingredients.map((ingredient, index) => (
+        {recipe.ingredients?.map((ingredient, index) => (
           <input
             key={index}
             type="text"
@@ -117,7 +119,7 @@ console.log(route.params);
           value={recipe.cookingTime}
           onChange={handleChange}
         />
-        <button type="submit">Create Recipe</button>
+        <button type="submit">Update Recipe</button>
       </form>
     </div>
   );

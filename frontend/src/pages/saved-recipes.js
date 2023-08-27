@@ -9,7 +9,6 @@ export const SavedRecipes = () => {
   const userID = useGetUserID();
   const navigate = useNavigate();
 
-console.log(route);
   useEffect(() => {
     const fetchSavedRecipes = async () => {
       try {
@@ -26,8 +25,8 @@ console.log(route);
   }, []);
 
   const handleEdit = (recipeData) => {
-    
-    // navigate('/edit-recipe',{data: {...recipeData}})
+    console.log(recipeData);
+    navigate('/edit-recipe',{state: {...recipeData}})
   }
 
   const handleDelete = () => {
@@ -45,8 +44,8 @@ console.log(route);
               <h2>{recipe.name}</h2>
               </div>
               <div>
-              <button onClick={(recipe) =>handleEdit(recipe)}> Edit</button>
-              <button onClick={(recipe) =>handleDelete(recipe)} style={{marginLeft: 20}}> Delete</button>
+              <button onClick={() =>handleEdit(recipe)}> Edit</button>
+              <button onClick={() =>handleDelete(recipe)} style={{marginLeft: 20}}> Delete</button>
               </div>
 
             </div>

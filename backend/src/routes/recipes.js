@@ -50,6 +50,7 @@ router.post("/", verifyToken, async (req, res) => {
 router.get("/:recipeId", async (req, res) => {
   try {
     const result = await RecipesModel.findById(req.params.recipeId);
+    console.log(result);
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json(err);
@@ -57,6 +58,18 @@ router.get("/:recipeId", async (req, res) => {
 });
 
 // Save a Recipe
+router.put("/", async (req, res) => {
+  const recipe = await RecipesModel.findById(req.body.recipeID);
+  const user = await UserModel.findById(req.body.userID);
+  try {
+    user.savedRecipes.push(recipe);
+    await user.save();
+    res.status(201).json({ savedRecipes: user.savedRecipes });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.put("/update", async (req, res) => {
   const recipe = await RecipesModel.findById(req.body.recipeID);
   const user = await UserModel.findById(req.body.userID);
